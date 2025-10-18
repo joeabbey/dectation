@@ -5,7 +5,7 @@ Voice control for Steam Deck using Talon Voice - the perfect blend of "deck" and
 Control your Steam Deck hands-free with voice commands using [Talon Voice](https://talonvoice.com/). Toggle between listening and sleeping mode with a simple keyboard shortcut.
 
 ![Dictation Mode in Action](dictation-mode-screenshot.png)
-*Press L1 + Y on Steam Deck to activate dictation mode and start speaking immediately!*
+*Visual feedback when using "hey claude" - the notification appears while Talon types and submits your message!*
 
 ## Features
 
@@ -220,9 +220,10 @@ Toggle sleep mode:
 2. **Toggle Script**: Checks if Talon is running, starts it if needed
 3. **REPL Communication**: Connects to Talon's REPL socket to send commands
 4. **Toggle Action**: Calls the custom `toggle_sleep` action in Talon
-5. **State Detection**: Checks current mode and toggles between sleep/dictation
-6. **Auto Dictation**: When waking, automatically enables dictation mode for immediate use
-7. **Feedback**: Shows desktop notifications for state changes
+5. **State Detection**: Checks current mode and toggles between sleep/silent
+6. **Silent Mode**: When waking, enables custom silent mode that only responds to "hey claude"
+7. **Wake Word**: Saying "hey claude [message]" triggers capture, typing, and auto-submit
+8. **Feedback**: Shows desktop notifications for state changes
 
 ## File Structure
 
@@ -231,7 +232,7 @@ dectation/
 ├── README.md                    # This file
 ├── install.sh                   # Easy installer script
 ├── uninstall.sh                 # Easy uninstaller script
-├── dictation-mode-screenshot.png # Screenshot showing dictation mode
+├── dictation-mode-screenshot.png # Screenshot showing visual feedback
 ├── scripts/
 │   ├── start-talon.sh          # Starts Talon in background
 │   ├── toggle-talon.sh         # Toggles Talon sleep/wake mode
