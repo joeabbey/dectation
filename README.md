@@ -7,7 +7,7 @@ Control your Steam Deck hands-free with voice commands using [Talon Voice](https
 ## Features
 
 - 🎤 **Voice Commands**: Full Talon Voice integration for hands-free control
-- ⌨️ **Keyboard Shortcut**: Toggle voice control on/off with `Ctrl+Space`
+- ⌨️ **Hardware Button Toggle**: Press `L1 + Y` on Steam Deck to toggle voice control (`Ctrl+Space`)
 - 🔄 **Auto-Start**: Automatically starts Talon if not running when triggered
 - 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Listening 🎤)
 - 🎮 **Steam Deck Optimized**: Configured specifically for Steam Deck in desktop mode
@@ -29,7 +29,7 @@ The installer will automatically:
 - Set up keyboard shortcuts
 - Configure all scripts
 
-After installation, press `Ctrl+Space` to toggle voice control!
+After installation, press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space` on a keyboard) to toggle voice control!
 
 ---
 
@@ -111,9 +111,11 @@ systemctl --user restart plasma-kglobalaccel.service
 
 ### Toggle Voice Control
 
-Press `Ctrl+Space` to toggle between:
+Press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space` on a keyboard) to toggle between:
 - **Listening 🎤** - Talon is active and listening for voice commands
 - **Sleeping 😴** - Talon is inactive and ignoring voice input
+
+> **Note**: On Steam Deck hardware, `L1 + Y` is mapped to `Ctrl+Space` in desktop mode
 
 ### Running Scripts Manually
 

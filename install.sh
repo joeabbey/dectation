@@ -200,6 +200,12 @@ fi
 print_info "Restarting keyboard shortcuts service..."
 if systemctl --user restart plasma-kglobalaccel.service 2>/dev/null; then
     print_success "Shortcuts service restarted"
+
+    # Verify shortcut was registered
+    sleep 1
+    if grep -q "Ctrl+Space" "$SHORTCUT_FILE" 2>/dev/null; then
+        print_success "Keyboard shortcut Ctrl+Space successfully configured!"
+    fi
 else
     print_warning "Could not restart shortcuts service (may require logout)"
 fi
@@ -227,13 +233,21 @@ print_success "Dectation has been successfully installed!"
 echo ""
 echo "Next steps:"
 echo "  1. Start Talon: $SCRIPT_DIR/scripts/start-talon.sh"
-echo "  2. Press Ctrl+Space to toggle voice control on/off"
+echo "  2. Press L1 + Y on Steam Deck (Ctrl+Space) to toggle voice control"
+echo "     (The keyboard shortcut has been automatically configured!)"
 echo ""
 echo "Tips:"
 echo "  • When Talon starts, it will show a microphone icon in your system tray"
-echo "  • Press Ctrl+Space to put Talon to sleep (icon changes)"
-echo "  • Press Ctrl+Space again to wake Talon up"
+echo "  • Press L1 + Y to put Talon to sleep (icon changes)"
+echo "  • Press L1 + Y again to wake Talon up"
 echo "  • Say 'help alphabet' to learn voice commands"
+echo ""
+echo "Steam Deck Button Mapping:"
+echo "  • L1 + Y = Ctrl+Space (toggle voice control)"
+echo ""
+echo "Note: If the Ctrl+Space shortcut doesn't work immediately, you may need to:"
+echo "  • Log out and log back in, OR"
+echo "  • Manually set it in: System Settings → Shortcuts → Custom Shortcuts"
 echo ""
 read -p "Start Talon now? (Y/n) " -n 1 -r
 echo
