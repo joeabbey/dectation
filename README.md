@@ -4,6 +4,9 @@ Voice control for Steam Deck using Talon Voice - the perfect blend of "deck" and
 
 Control your Steam Deck hands-free with voice commands using [Talon Voice](https://talonvoice.com/). Toggle between listening and sleeping mode with a simple keyboard shortcut.
 
+![Dictation Mode in Action](dictation-mode-screenshot.png)
+*Press L1 + Y on Steam Deck to activate dictation mode and start speaking immediately!*
+
 ## Features
 
 - 🎤 **Voice Commands**: Full Talon Voice integration for hands-free control
