@@ -163,10 +163,7 @@ print_header "Step 5: Installing Dectation Scripts"
 # Copy Talon scripts to user directory
 print_info "Installing Talon scripts..."
 cp "$SCRIPT_DIR/talon/toggle_sleep.py" "$HOME/.talon/user/"
-cp "$SCRIPT_DIR/talon/hey_claude.talon" "$HOME/.talon/user/"
-cp "$SCRIPT_DIR/talon/hey_claude.py" "$HOME/.talon/user/"
-cp "$SCRIPT_DIR/talon/silent_mode.py" "$HOME/.talon/user/"
-print_success "Installed toggle_sleep.py, hey_claude.talon, hey_claude.py, and silent_mode.py (overwrites existing)"
+print_success "Installed toggle_sleep.py (overwrites existing)"
 
 # Make scripts executable
 print_info "Making scripts executable..."

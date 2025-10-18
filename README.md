@@ -5,16 +5,15 @@ Voice control for Steam Deck using Talon Voice - the perfect blend of "deck" and
 Control your Steam Deck hands-free with voice commands using [Talon Voice](https://talonvoice.com/). Toggle between listening and sleeping mode with a simple keyboard shortcut.
 
 ![Dictation Mode in Action](dictation-mode-screenshot.png)
-*Visual feedback when using "hey claude" - the notification appears while Talon types and submits your message!*
+*Press L1 + Y on Steam Deck to activate dictation mode and start speaking immediately!*
 
 ## Features
 
 - 🎤 **Voice Commands**: Full Talon Voice integration for hands-free control
-- 🗣️ **"Hey Claude" Wake Word**: Silent listening mode - only responds when you say "hey claude"
 - ⌨️ **Hardware Button Toggle**: Press `L1 + Y` on Steam Deck to toggle voice control (`Ctrl+Space`)
-- 🎧 **Silent Listening Mode**: Wakes up listening but silent - prevents accidental typing
+- 📝 **Auto Dictation Mode**: Wakes up in dictation mode - just press L1+Y and start talking!
 - 🔄 **Auto-Start**: Automatically starts Talon if not running when triggered
-- 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Listening 🎧)
+- 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Dictation Mode 🎤)
 - 🎮 **Steam Deck Optimized**: Configured specifically for Steam Deck in desktop mode
 
 ## Quick Start
@@ -174,33 +173,12 @@ After models are installed, voice recognition will work automatically!
 ### Toggle Voice Control
 
 Press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space` on a keyboard) to toggle between:
-- **Listening 🎧** - Talon is awake and listening, but won't type anything until you say "hey claude"
+- **Dictation Mode 🎤** - Talon wakes up in dictation mode, ready for you to start speaking text immediately
 - **Sleeping 😴** - Talon is inactive and ignoring voice input
 
 > **Note**: On Steam Deck hardware, `L1 + Y` is mapped to `Ctrl+Space` in desktop mode
 >
-> **Tip**: When you wake Talon, it enters silent listening mode. This prevents accidental typing from background conversations while keeping voice control ready!
-
-### Hey Claude - Wake Word for Voice Input
-
-**Workflow:**
-1. Press **`L1 + Y`** to wake Talon into listening mode 🎧
-2. Talon listens silently - won't type anything you say
-3. Say **"hey claude [your message]"** when ready
-4. Your message is typed and Enter is pressed automatically!
-
-**Examples:**
-- "hey claude create a file called test.py"
-- "hey claude what's the weather like today"
-- "hey claude search for documentation on React hooks"
-
-**Why this works well:**
-- **No accidental typing**: Have conversations freely without triggering dictation
-- **Always ready**: Talon stays awake and ready for your "hey claude" command
-- **Perfect for chat**: Auto-submit makes it ideal for Claude Code, messaging apps, and searches
-- **Hands-free on Steam Deck**: Control everything from your controller
-
-> **Note**: The `hey_claude.talon` file must be installed to `~/.talon/user/` (automatically done by the installer)
+> **Tip**: When you wake Talon, it automatically enters dictation mode - just start talking! No need to say "dictation mode" first.
 
 ### Running Scripts Manually
 
@@ -220,10 +198,9 @@ Toggle sleep mode:
 2. **Toggle Script**: Checks if Talon is running, starts it if needed
 3. **REPL Communication**: Connects to Talon's REPL socket to send commands
 4. **Toggle Action**: Calls the custom `toggle_sleep` action in Talon
-5. **State Detection**: Checks current mode and toggles between sleep/silent
-6. **Silent Mode**: When waking, enables custom silent mode that only responds to "hey claude"
-7. **Wake Word**: Saying "hey claude [message]" triggers capture, typing, and auto-submit
-8. **Feedback**: Shows desktop notifications for state changes
+5. **State Detection**: Checks current mode and toggles between sleep/dictation
+6. **Auto Dictation**: When waking, automatically enables dictation mode for immediate use
+7. **Feedback**: Shows desktop notifications for state changes
 
 ## File Structure
 
@@ -232,16 +209,13 @@ dectation/
 ├── README.md                    # This file
 ├── install.sh                   # Easy installer script
 ├── uninstall.sh                 # Easy uninstaller script
-├── dictation-mode-screenshot.png # Screenshot showing visual feedback
+├── dictation-mode-screenshot.png # Screenshot showing dictation mode
 ├── scripts/
 │   ├── start-talon.sh          # Starts Talon in background
 │   ├── toggle-talon.sh         # Toggles Talon sleep/wake mode
 │   └── setup-talon-eula.sh     # Accepts Talon EULA and configures app.ini
 ├── talon/
-│   ├── toggle_sleep.py         # Talon action for toggling sleep/silent modes
-│   ├── silent_mode.py          # Custom silent listening mode definition
-│   ├── hey_claude.talon        # "Hey Claude" voice command definition
-│   └── hey_claude.py           # Documentation for Hey Claude feature
+│   └── toggle_sleep.py         # Talon action for toggling sleep
 └── toggle-dictation.desktop    # Desktop file for keyboard shortcut
 ```
 

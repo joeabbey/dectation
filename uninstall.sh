@@ -42,7 +42,7 @@ echo ""
 echo "This will remove:"
 echo "  • Talon Voice installation (~/talon/)"
 echo "  • Talon community commands (~/.talon/user/community/)"
-echo "  • Dectation scripts (toggle_sleep.py, hey_claude.*, silent_mode.py)"
+echo "  • Dectation scripts (toggle_sleep.py)"
 echo "  • Keyboard shortcuts configuration"
 echo "  • Desktop file integration"
 echo "  • PATH modifications from .bashrc"
@@ -132,29 +132,20 @@ fi
 echo ""
 print_header "Step 4: Removing Dectation Scripts"
 
-# Remove all Dectation Talon files
-DECTATION_FILES=(
-    "$HOME/.talon/user/toggle_sleep.py"
-    "$HOME/.talon/user/toggle_sleep.talon"
-    "$HOME/.talon/user/hey_claude.py"
-    "$HOME/.talon/user/hey_claude.talon"
-    "$HOME/.talon/user/silent_mode.py"
-)
-
-for file in "${DECTATION_FILES[@]}"; do
-    if [ -f "$file" ]; then
-        print_info "Removing $(basename "$file")..."
-        rm -f "$file"
-        print_success "Removed $(basename "$file")"
-    fi
-done
-
-if [ ! -f "$HOME/.talon/user/toggle_sleep.py" ] && \
-   [ ! -f "$HOME/.talon/user/hey_claude.py" ] && \
-   [ ! -f "$HOME/.talon/user/silent_mode.py" ]; then
-    print_success "All Dectation scripts removed"
+# Remove toggle_sleep.py from Talon user directory
+if [ -f "$HOME/.talon/user/toggle_sleep.py" ]; then
+    print_info "Removing toggle_sleep.py..."
+    rm -f "$HOME/.talon/user/toggle_sleep.py"
+    print_success "Removed toggle_sleep.py"
 else
-    print_info "Some Dectation scripts not found (may already be removed)"
+    print_info "toggle_sleep.py not found"
+fi
+
+# Remove toggle_sleep.talon if it exists
+if [ -f "$HOME/.talon/user/toggle_sleep.talon" ]; then
+    print_info "Removing toggle_sleep.talon..."
+    rm -f "$HOME/.talon/user/toggle_sleep.talon"
+    print_success "Removed toggle_sleep.talon"
 fi
 
 echo ""
