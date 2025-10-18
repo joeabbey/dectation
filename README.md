@@ -26,11 +26,36 @@ cd dectation
 
 The installer will automatically:
 - Download and install Talon Voice
+- Accept the Talon EULA (https://talonvoice.com/EULA.txt)
 - Install Talon community commands
-- Set up keyboard shortcuts
+- Set up keyboard shortcuts (L1 + Y / Ctrl+Space)
 - Configure all scripts
 
-After installation, press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space` on a keyboard) to toggle voice control!
+**Note:** By running the installer, you agree to the Talon Voice End User License Agreement.
+
+**After installation:**
+1. Speech models need to be installed through Talon's GUI (one-time setup)
+2. Right-click Talon tray icon → **Speech Recognition** → **Install Conformer**
+3. Press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space`) to toggle voice control!
+
+See the [First Run](#first-run-installing-speech-models) section below for detailed instructions.
+
+### Uninstallation
+
+To remove Dectation from your system:
+
+```bash
+cd ~/dectation
+./uninstall.sh
+```
+
+The uninstaller will:
+- Stop Talon if running
+- Remove keyboard shortcuts
+- Remove desktop file integration
+- Remove installed scripts
+- Optionally remove Talon Voice and community commands
+- Clean up PATH modifications
 
 ---
 
@@ -54,21 +79,39 @@ curl -L -o talon-linux.tar.xz https://talonvoice.com/dl/latest/talon-linux.tar.x
 tar -xf talon-linux.tar.xz
 ```
 
-### 2. Install Talon Community Commands
+### 2. Accept Talon EULA
+
+On first run, Talon will prompt you to accept the EULA. You can pre-accept it by creating `~/.talon/.sys/app.ini`:
+
+```bash
+mkdir -p ~/.talon/.sys
+cat > ~/.talon/.sys/app.ini << 'EOF'
+[Talon]
+IAgreeToEulaVersion=5
+EOF
+```
+
+Or use the provided script:
+
+```bash
+~/dectation/scripts/setup-talon-eula.sh
+```
+
+### 3. Install Talon Community Commands
 
 ```bash
 cd ~/.talon/user
 git clone https://github.com/talonhub/community.git
 ```
 
-### 3. Clone This Repository
+### 4. Clone This Repository
 
 ```bash
 cd ~
 git clone https://github.com/joeabbey/dectation.git
 ```
 
-### 4. Install Scripts
+### 5. Install Scripts
 
 Copy the Talon toggle action:
 
@@ -82,7 +125,7 @@ Make scripts executable:
 chmod +x ~/dectation/scripts/*.sh
 ```
 
-### 5. Set Up Keyboard Shortcut
+### 6. Set Up Keyboard Shortcut
 
 Copy the desktop file:
 
@@ -107,6 +150,20 @@ kwriteconfig5 --file kglobalshortcutsrc --group "services" --group "net.local.to
 # Restart the shortcuts service
 systemctl --user restart plasma-kglobalaccel.service
 ```
+
+## First Run: Installing Speech Models
+
+**Important**: On first run, you need to install Talon's speech recognition models through the Talon GUI.
+
+1. Start Talon (it should auto-start after installation, or run `~/dectation/scripts/start-talon.sh`)
+2. Look for the Talon microphone icon in your system tray
+3. Right-click the icon and select **Speech Recognition** → **Install Conformer**
+4. Talon will download the speech models (~100-200MB) in the background
+5. You'll receive a notification when models are ready
+
+> **Why manual installation?** Talon requires explicit user consent to download speech models. This step only needs to be done once - models are cached and persist across restarts.
+
+After models are installed, voice recognition will work automatically!
 
 ## Usage
 
@@ -148,15 +205,37 @@ Toggle sleep mode:
 dectation/
 ├── README.md                    # This file
 ├── install.sh                   # Easy installer script
+├── uninstall.sh                 # Easy uninstaller script
 ├── scripts/
 │   ├── start-talon.sh          # Starts Talon in background
-│   └── toggle-talon.sh         # Toggles Talon sleep/wake mode
+│   ├── toggle-talon.sh         # Toggles Talon sleep/wake mode
+│   └── setup-talon-eula.sh     # Accepts Talon EULA and configures app.ini
 ├── talon/
 │   └── toggle_sleep.py         # Talon action for toggling sleep
 └── toggle-dictation.desktop    # Desktop file for keyboard shortcut
 ```
 
 ## Troubleshooting
+
+### Voice recognition not working / No speech engine
+
+If Talon starts but doesn't recognize voice commands:
+
+1. **Check if speech models are installed:**
+   ```bash
+   du -sh ~/.talon/.sys/blob/
+   # Should show ~200-250MB if models are installed
+   # If only a few KB, models aren't downloaded yet
+   ```
+
+2. **Install speech models via Talon GUI:**
+   - Right-click Talon tray icon → **Speech Recognition** → **Install Conformer**
+   - Wait for download to complete (~100-200MB)
+   - You'll see a notification when ready
+
+3. **Verify microphone is detected:**
+   - Check Talon logs: `tail ~/.talon/talon.log`
+   - Look for "Activating Microphone" messages
 
 ### Keyboard shortcut doesn't work
 

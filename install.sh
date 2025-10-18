@@ -42,9 +42,13 @@ echo ""
 echo "This installer will set up voice control for your Steam Deck."
 echo "It will:"
 echo "  • Download and install Talon Voice"
+echo "  • Accept Talon EULA (https://talonvoice.com/EULA.txt)"
+echo "  • Download speech recognition models (~100-200MB)"
 echo "  • Install Talon community commands"
 echo "  • Configure keyboard shortcuts (Ctrl+Space)"
 echo "  • Set up all necessary scripts"
+echo ""
+echo "By continuing, you agree to the Talon Voice EULA."
 echo ""
 read -p "Continue with installation? (y/N) " -n 1 -r
 echo
@@ -147,7 +151,14 @@ else
 fi
 
 echo ""
-print_header "Step 4: Installing Dectation Scripts"
+print_header "Step 4: Accepting Talon EULA"
+
+# Run EULA setup script
+print_info "Configuring Talon EULA acceptance..."
+"$SCRIPT_DIR/scripts/setup-talon-eula.sh"
+
+echo ""
+print_header "Step 5: Installing Dectation Scripts"
 
 # Copy toggle_sleep.py to Talon user directory
 print_info "Installing toggle_sleep.py..."
@@ -160,7 +171,7 @@ chmod +x "$SCRIPT_DIR/scripts"/*.sh
 print_success "Scripts are now executable"
 
 echo ""
-print_header "Step 5: Setting Up Keyboard Shortcut"
+print_header "Step 6: Setting Up Keyboard Shortcut"
 
 # Copy desktop file
 print_info "Installing desktop file..."
@@ -211,7 +222,7 @@ else
 fi
 
 echo ""
-print_header "Step 6: Final Setup"
+print_header "Step 7: Final Setup"
 
 # Create log directory
 mkdir -p "$HOME/.talon"
@@ -233,10 +244,19 @@ print_header "Installation Complete!"
 echo ""
 print_success "Dectation has been successfully installed!"
 echo ""
+print_warning "IMPORTANT: First-time setup required!"
+echo ""
+echo "After Talon starts, you need to install speech models (one-time setup):"
+echo "  1. Look for the Talon microphone icon in your system tray"
+echo "  2. Right-click the icon"
+echo "  3. Select: Speech Recognition → Install Conformer"
+echo "  4. Wait for models to download (~100-200MB)"
+echo "  5. You'll see a notification when ready!"
+echo ""
 echo "Next steps:"
-echo "  1. Start Talon: $SCRIPT_DIR/scripts/start-talon.sh"
-echo "  2. Press L1 + Y on Steam Deck (Ctrl+Space) to toggle voice control"
-echo "     (The keyboard shortcut has been automatically configured!)"
+echo "  1. Start Talon (can be done automatically below)"
+echo "  2. Install speech models via Talon tray icon (see above)"
+echo "  3. Press L1 + Y on Steam Deck (Ctrl+Space) to toggle voice control"
 echo ""
 echo "Tips:"
 echo "  • When Talon starts, it will show a microphone icon in your system tray"
