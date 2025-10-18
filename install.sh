@@ -160,10 +160,13 @@ print_info "Configuring Talon EULA acceptance..."
 echo ""
 print_header "Step 5: Installing Dectation Scripts"
 
-# Copy toggle_sleep.py to Talon user directory
-print_info "Installing toggle_sleep.py..."
+# Copy Talon scripts to user directory
+print_info "Installing Talon scripts..."
 cp "$SCRIPT_DIR/talon/toggle_sleep.py" "$HOME/.talon/user/"
-print_success "Installed toggle_sleep.py (overwrites existing)"
+cp "$SCRIPT_DIR/talon/hey_claude.talon" "$HOME/.talon/user/"
+cp "$SCRIPT_DIR/talon/hey_claude.py" "$HOME/.talon/user/"
+cp "$SCRIPT_DIR/talon/silent_mode.py" "$HOME/.talon/user/"
+print_success "Installed toggle_sleep.py, hey_claude.talon, hey_claude.py, and silent_mode.py (overwrites existing)"
 
 # Make scripts executable
 print_info "Making scripts executable..."
