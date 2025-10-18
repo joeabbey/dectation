@@ -8,8 +8,9 @@ Control your Steam Deck hands-free with voice commands using [Talon Voice](https
 
 - 🎤 **Voice Commands**: Full Talon Voice integration for hands-free control
 - ⌨️ **Hardware Button Toggle**: Press `L1 + Y` on Steam Deck to toggle voice control (`Ctrl+Space`)
+- 📝 **Auto Dictation Mode**: Wakes up in dictation mode - just press L1+Y and start talking!
 - 🔄 **Auto-Start**: Automatically starts Talon if not running when triggered
-- 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Listening 🎤)
+- 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Dictation Mode 🎤)
 - 🎮 **Steam Deck Optimized**: Configured specifically for Steam Deck in desktop mode
 
 ## Quick Start
@@ -112,10 +113,12 @@ systemctl --user restart plasma-kglobalaccel.service
 ### Toggle Voice Control
 
 Press **`L1 + Y`** on your Steam Deck (or `Ctrl+Space` on a keyboard) to toggle between:
-- **Listening 🎤** - Talon is active and listening for voice commands
+- **Dictation Mode 🎤** - Talon wakes up in dictation mode, ready for you to start speaking text immediately
 - **Sleeping 😴** - Talon is inactive and ignoring voice input
 
 > **Note**: On Steam Deck hardware, `L1 + Y` is mapped to `Ctrl+Space` in desktop mode
+>
+> **Tip**: When you wake Talon, it automatically enters dictation mode - just start talking! No need to say "dictation mode" first.
 
 ### Running Scripts Manually
 
@@ -131,12 +134,13 @@ Toggle sleep mode:
 
 ## How It Works
 
-1. **Keyboard Shortcut**: `Ctrl+Space` triggers the desktop file via KDE's global shortcuts
+1. **Keyboard Shortcut**: `L1 + Y` (mapped to `Ctrl+Space`) triggers the desktop file via KDE's global shortcuts
 2. **Toggle Script**: Checks if Talon is running, starts it if needed
 3. **REPL Communication**: Connects to Talon's REPL socket to send commands
 4. **Toggle Action**: Calls the custom `toggle_sleep` action in Talon
-5. **State Detection**: Checks current mode and toggles between sleep/awake
-6. **Feedback**: Shows desktop notifications for state changes
+5. **State Detection**: Checks current mode and toggles between sleep/dictation
+6. **Auto Dictation**: When waking, automatically enables dictation mode for immediate use
+7. **Feedback**: Shows desktop notifications for state changes
 
 ## File Structure
 
