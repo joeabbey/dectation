@@ -251,25 +251,33 @@ echo "Note: If the Ctrl+Space shortcut doesn't work immediately, you may need to
 echo "  • Log out and log back in, OR"
 echo "  • Manually set it in: System Settings → Shortcuts → Custom Shortcuts"
 echo ""
-read -p "Start Talon now? (Y/n) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-    print_info "Starting Talon..."
-    nohup "$SCRIPT_DIR/scripts/start-talon.sh" > /dev/null 2>&1 &
-    sleep 2
 
-    if pgrep -f "talon/talon" > /dev/null; then
-        print_success "Talon is now running!"
-        echo ""
-        echo "Look for the microphone icon in your system tray."
-        echo "Try saying 'help alphabet' to test voice control!"
-    else
-        print_warning "Talon may not have started. Try running: $SCRIPT_DIR/scripts/start-talon.sh"
-    fi
-else
+# Check if Talon is already running
+if pgrep -f "talon/talon" > /dev/null; then
+    print_success "Talon is already running!"
     echo ""
-    echo "You can start Talon later with:"
-    echo "  $SCRIPT_DIR/scripts/start-talon.sh"
+    echo "Press L1 + Y to toggle voice control on/off."
+else
+    read -p "Start Talon now? (Y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        print_info "Starting Talon..."
+        nohup "$SCRIPT_DIR/scripts/start-talon.sh" > /dev/null 2>&1 &
+        sleep 2
+
+        if pgrep -f "talon/talon" > /dev/null; then
+            print_success "Talon is now running!"
+            echo ""
+            echo "Look for the microphone icon in your system tray."
+            echo "Try saying 'help alphabet' to test voice control!"
+        else
+            print_warning "Talon may not have started. Try running: $SCRIPT_DIR/scripts/start-talon.sh"
+        fi
+    else
+        echo ""
+        echo "You can start Talon later with:"
+        echo "  $SCRIPT_DIR/scripts/start-talon.sh"
+    fi
 fi
 
 echo ""
