@@ -29,11 +29,18 @@ class Actions:
             log_to_file(f"current modes: {scope.get('mode', [])}")
 
             if is_sleeping:
-                # Currently sleeping, wake up
+                # Currently sleeping, wake up in dictation mode
                 log_to_file("Waking up (calling speech.enable())")
                 actions.speech.enable()
-                app.notify("Listening 🎤")
-                log_to_file("Sent listening notification")
+
+                # Switch to dictation mode after waking up
+                log_to_file("Switching to dictation mode")
+                actions.mode.disable("sleep")
+                actions.mode.disable("command")
+                actions.mode.enable("dictation")
+
+                app.notify("Dictation Mode 🎤")
+                log_to_file("Sent dictation mode notification")
             else:
                 # Currently awake, go to sleep
                 log_to_file("Going to sleep (calling speech.disable())")
