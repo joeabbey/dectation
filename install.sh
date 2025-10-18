@@ -152,7 +152,7 @@ print_header "Step 4: Installing Dectation Scripts"
 # Copy toggle_sleep.py to Talon user directory
 print_info "Installing toggle_sleep.py..."
 cp "$SCRIPT_DIR/talon/toggle_sleep.py" "$HOME/.talon/user/"
-print_success "Installed toggle_sleep.py"
+print_success "Installed toggle_sleep.py (overwrites existing)"
 
 # Make scripts executable
 print_info "Making scripts executable..."
@@ -224,6 +224,8 @@ if ! grep -q "dectation/scripts" "$HOME/.bashrc" 2>/dev/null; then
     echo '# Dectation voice control scripts' >> "$HOME/.bashrc"
     echo 'export PATH="$HOME/dectation/scripts:$PATH"' >> "$HOME/.bashrc"
     print_success "Added to PATH (will take effect in new terminals)"
+else
+    print_info "PATH already configured (skipping)"
 fi
 
 echo ""
