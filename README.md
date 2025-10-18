@@ -12,14 +12,36 @@ Control your Steam Deck hands-free with voice commands using [Talon Voice](https
 - 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Listening 🎤)
 - 🎮 **Steam Deck Optimized**: Configured specifically for Steam Deck in desktop mode
 
-## Prerequisites
+## Quick Start
+
+**Easy Installation (Recommended):**
+
+```bash
+cd ~
+git clone https://github.com/joeabbey/dectation.git
+cd dectation
+./install.sh
+```
+
+The installer will automatically:
+- Download and install Talon Voice
+- Install Talon community commands
+- Set up keyboard shortcuts
+- Configure all scripts
+
+After installation, press `Ctrl+Space` to toggle voice control!
+
+---
+
+## Manual Installation
+
+If you prefer to install manually or want more control:
+
+### Prerequisites
 
 - Steam Deck in Desktop Mode (KDE Plasma)
-- Talon Voice installed at `~/talon/`
-- Talon community config at `~/.talon/user/community/`
 - Python 3 (pre-installed on Steam Deck)
-
-## Installation
+- Git and curl (pre-installed on Steam Deck)
 
 ### 1. Install Talon Voice
 
@@ -119,6 +141,7 @@ Toggle sleep mode:
 ```
 dectation/
 ├── README.md                    # This file
+├── install.sh                   # Easy installer script
 ├── scripts/
 │   ├── start-talon.sh          # Starts Talon in background
 │   └── toggle-talon.sh         # Toggles Talon sleep/wake mode

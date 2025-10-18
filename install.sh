@@ -1,0 +1,265 @@
+#!/bin/bash
+# Dectation Easy Installer
+# Automatically sets up voice control for Steam Deck
+
+set -e  # Exit on error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Helper functions
+print_header() {
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BLUE}  $1${NC}"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}✗${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}!${NC} $1"
+}
+
+print_info() {
+    echo -e "${BLUE}→${NC} $1"
+}
+
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+print_header "Dectation Installer for Steam Deck"
+echo ""
+echo "This installer will set up voice control for your Steam Deck."
+echo "It will:"
+echo "  • Download and install Talon Voice"
+echo "  • Install Talon community commands"
+echo "  • Configure keyboard shortcuts (Ctrl+Space)"
+echo "  • Set up all necessary scripts"
+echo ""
+read -p "Continue with installation? (y/N) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Installation cancelled."
+    exit 0
+fi
+
+echo ""
+print_header "Step 1: Checking Prerequisites"
+
+# Check if we're on Steam Deck
+if [ ! -f /etc/os-release ] || ! grep -q "steamdeck" /etc/os-release 2>/dev/null; then
+    print_warning "This doesn't appear to be a Steam Deck, but continuing anyway..."
+else
+    print_success "Running on Steam Deck"
+fi
+
+# Check for required commands
+if ! command -v python3 &> /dev/null; then
+    print_error "Python 3 is required but not found"
+    exit 1
+fi
+print_success "Python 3 found"
+
+if ! command -v git &> /dev/null; then
+    print_error "Git is required but not found"
+    exit 1
+fi
+print_success "Git found"
+
+if ! command -v curl &> /dev/null; then
+    print_error "curl is required but not found"
+    exit 1
+fi
+print_success "curl found"
+
+echo ""
+print_header "Step 2: Installing Talon Voice"
+
+# Check if Talon is already installed
+if [ -d "$HOME/talon" ] && [ -f "$HOME/talon/talon" ]; then
+    print_warning "Talon already installed at ~/talon/"
+    read -p "Skip Talon installation? (Y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Nn]$ ]]; then
+        rm -rf "$HOME/talon"
+    else
+        print_info "Skipping Talon installation"
+        SKIP_TALON=true
+    fi
+fi
+
+if [ "$SKIP_TALON" != "true" ]; then
+    print_info "Downloading Talon Voice..."
+    cd "$HOME"
+
+    # Download Talon
+    if [ -f "talon-linux.tar.xz" ]; then
+        print_info "Talon archive already downloaded, using existing file"
+    else
+        curl -L -o talon-linux.tar.xz "https://talonvoice.com/dl/latest/talon-linux.tar.xz"
+        print_success "Downloaded Talon Voice"
+    fi
+
+    # Extract Talon
+    print_info "Extracting Talon..."
+    tar -xf talon-linux.tar.xz
+    print_success "Extracted Talon Voice"
+
+    # Clean up
+    rm talon-linux.tar.xz
+    print_success "Talon Voice installed to ~/talon/"
+fi
+
+echo ""
+print_header "Step 3: Installing Talon Community Commands"
+
+# Create .talon/user directory
+mkdir -p "$HOME/.talon/user"
+
+# Check if community is already installed
+if [ -d "$HOME/.talon/user/community" ]; then
+    print_warning "Talon community already installed"
+    read -p "Update existing installation? (Y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        print_info "Updating Talon community..."
+        cd "$HOME/.talon/user/community"
+        git pull
+        print_success "Updated Talon community"
+    else
+        print_info "Skipping community installation"
+    fi
+else
+    print_info "Cloning Talon community repository..."
+    cd "$HOME/.talon/user"
+    git clone https://github.com/talonhub/community.git
+    print_success "Installed Talon community commands"
+fi
+
+echo ""
+print_header "Step 4: Installing Dectation Scripts"
+
+# Copy toggle_sleep.py to Talon user directory
+print_info "Installing toggle_sleep.py..."
+cp "$SCRIPT_DIR/talon/toggle_sleep.py" "$HOME/.talon/user/"
+print_success "Installed toggle_sleep.py"
+
+# Make scripts executable
+print_info "Making scripts executable..."
+chmod +x "$SCRIPT_DIR/scripts"/*.sh
+print_success "Scripts are now executable"
+
+echo ""
+print_header "Step 5: Setting Up Keyboard Shortcut"
+
+# Copy desktop file
+print_info "Installing desktop file..."
+mkdir -p "$HOME/.local/share/applications"
+cp "$SCRIPT_DIR/toggle-dictation.desktop" "$HOME/.local/share/applications/net.local.toggle-dictation.sh.desktop"
+
+# Update desktop database
+if command -v update-desktop-database &> /dev/null; then
+    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+fi
+print_success "Desktop file installed"
+
+# Configure keyboard shortcut
+print_info "Configuring Ctrl+Space keyboard shortcut..."
+
+# Add to kglobalshortcutsrc
+SHORTCUT_FILE="$HOME/.config/kglobalshortcutsrc"
+
+if [ -f "$SHORTCUT_FILE" ]; then
+    # Check if entry already exists
+    if grep -q "\[services\]\[net.local.toggle-dictation.sh.desktop\]" "$SHORTCUT_FILE"; then
+        print_warning "Keyboard shortcut already configured"
+    else
+        # Add shortcut entry
+        cat >> "$SHORTCUT_FILE" << 'EOF'
+
+[services][net.local.toggle-dictation.sh.desktop]
+_launch=Ctrl+Space
+EOF
+        print_success "Keyboard shortcut configured"
+    fi
+else
+    print_warning "KDE shortcuts config not found, you may need to configure manually"
+fi
+
+# Restart shortcuts service
+print_info "Restarting keyboard shortcuts service..."
+if systemctl --user restart plasma-kglobalaccel.service 2>/dev/null; then
+    print_success "Shortcuts service restarted"
+else
+    print_warning "Could not restart shortcuts service (may require logout)"
+fi
+
+echo ""
+print_header "Step 6: Final Setup"
+
+# Create log directory
+mkdir -p "$HOME/.talon"
+print_success "Created log directory"
+
+# Add dectation scripts to PATH (optional)
+if ! grep -q "dectation/scripts" "$HOME/.bashrc" 2>/dev/null; then
+    print_info "Adding dectation scripts to PATH..."
+    echo '' >> "$HOME/.bashrc"
+    echo '# Dectation voice control scripts' >> "$HOME/.bashrc"
+    echo 'export PATH="$HOME/dectation/scripts:$PATH"' >> "$HOME/.bashrc"
+    print_success "Added to PATH (will take effect in new terminals)"
+fi
+
+echo ""
+print_header "Installation Complete!"
+echo ""
+print_success "Dectation has been successfully installed!"
+echo ""
+echo "Next steps:"
+echo "  1. Start Talon: $SCRIPT_DIR/scripts/start-talon.sh"
+echo "  2. Press Ctrl+Space to toggle voice control on/off"
+echo ""
+echo "Tips:"
+echo "  • When Talon starts, it will show a microphone icon in your system tray"
+echo "  • Press Ctrl+Space to put Talon to sleep (icon changes)"
+echo "  • Press Ctrl+Space again to wake Talon up"
+echo "  • Say 'help alphabet' to learn voice commands"
+echo ""
+read -p "Start Talon now? (Y/n) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+    print_info "Starting Talon..."
+    nohup "$SCRIPT_DIR/scripts/start-talon.sh" > /dev/null 2>&1 &
+    sleep 2
+
+    if pgrep -f "talon/talon" > /dev/null; then
+        print_success "Talon is now running!"
+        echo ""
+        echo "Look for the microphone icon in your system tray."
+        echo "Try saying 'help alphabet' to test voice control!"
+    else
+        print_warning "Talon may not have started. Try running: $SCRIPT_DIR/scripts/start-talon.sh"
+    fi
+else
+    echo ""
+    echo "You can start Talon later with:"
+    echo "  $SCRIPT_DIR/scripts/start-talon.sh"
+fi
+
+echo ""
+print_header "Enjoy Dectation!"
+echo ""
+echo "For help and documentation, see:"
+echo "  $SCRIPT_DIR/README.md"
+echo "  https://github.com/joeabbey/dectation"
+echo ""
