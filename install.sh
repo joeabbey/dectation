@@ -203,7 +203,7 @@ print_header "Step 6: Setting Up Keyboard Shortcut"
 # Copy desktop file
 print_info "Installing desktop file..."
 mkdir -p "$HOME/.local/share/applications"
-cp "$SCRIPT_DIR/toggle-dictation.desktop" "$HOME/.local/share/applications/net.local.toggle-dictation.sh.desktop"
+cp "$SCRIPT_DIR/desktop/toggle-dictation.desktop" "$HOME/.local/share/applications/net.local.toggle-dictation.sh.desktop"
 
 # Update desktop database
 if command -v update-desktop-database &> /dev/null; then

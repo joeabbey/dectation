@@ -2,7 +2,7 @@
 
 Voice control for Steam Deck using Talon Voice - now with intelligent keyboard management and seamless Claude Code integration!
 
-![Dictation Mode in Action](dictation-mode-screenshot.png)
+![Dictation Mode in Action](screenshots/dictation-mode-screenshot.png)
 *Press L1 + Y on Steam Deck to activate dictation mode - keyboard automatically hides!*
 
 ## What's New in V2

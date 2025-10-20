@@ -4,8 +4,18 @@ Voice control for Steam Deck using Talon Voice - the perfect blend of "deck" and
 
 Control your Steam Deck hands-free with voice commands using [Talon Voice](https://talonvoice.com/). Toggle between listening and sleeping mode with a simple keyboard shortcut.
 
-![Dictation Mode in Action](dictation-mode-screenshot.png)
+![Dictation Mode in Action](docs/screenshots/dictation-mode-screenshot.png)
 *Press L1 + Y on Steam Deck to activate dictation mode and start speaking immediately!*
+
+## ✨ What's New in V2
+
+**Smart Keyboard Management** - Onscreen keyboard automatically hides when you start dictating!
+**Claude Code Integration** - Send prompts to Claude using your voice ("claude review this", "send to claude")
+**Quick Templates** - Pre-built prompts for common tasks (review, refactor, debug, explain, etc.)
+
+👉 **See [docs/README_V2.md](docs/README_V2.md) for complete V2 features and voice commands!**
+
+---
 
 ## Features
 
@@ -15,6 +25,12 @@ Control your Steam Deck hands-free with voice commands using [Talon Voice](https
 - 🔄 **Auto-Start**: Automatically starts Talon if not running when triggered
 - 🔔 **Visual Feedback**: Desktop notifications show current state (Sleeping 😴 / Dictation Mode 🎤)
 - 🎮 **Steam Deck Optimized**: Configured specifically for Steam Deck in desktop mode
+
+### V2 Features
+- ⌨️ **Smart Keyboard**: Auto-hide/show onscreen keyboard during dictation
+- 🤖 **Claude Integration**: Voice commands for Claude Code
+- 📋 **Clipboard Workflow**: Seamless code capture and prompt sending
+- 🎯 **Quick Templates**: "claude review/refactor/debug/explain this"
 
 ## Quick Start
 
@@ -309,6 +325,40 @@ Then check logs at:
 - `~/.talon/toggle.log` - Toggle events
 - `~/.talon/talon.log` - Talon application log
 
+## 📚 Documentation
+
+- **[docs/README_V2.md](docs/README_V2.md)** - Complete V2 feature guide with voice commands
+- **[docs/V2_SUMMARY.md](docs/V2_SUMMARY.md)** - Quick reference for V2 features
+- **[docs/V2_PLAN.md](docs/V2_PLAN.md)** - Detailed V2 implementation plan and roadmap
+- **[docs/CLAUDE.md](docs/CLAUDE.md)** - Developer guide for working with this codebase
+- **[docs/TESTING.md](docs/TESTING.md)** - Testing guide and procedures
+
+## 📁 Project Structure
+
+```
+dectation/
+├── README.md              # This file - getting started guide
+├── install.sh             # One-command installer
+├── uninstall.sh          # One-command uninstaller
+├── docs/                 # 📚 All documentation
+│   ├── README_V2.md      # V2 feature guide
+│   ├── V2_SUMMARY.md     # Quick reference
+│   └── screenshots/      # Project screenshots
+├── scripts/              # 🔧 Executable scripts
+│   ├── toggle-talon.sh   # Main toggle script
+│   ├── start-talon.sh    # Talon launcher
+│   ├── steam-keyboard-control.sh  # V2: Keyboard management
+│   └── claude-session-manager.sh  # V2: Claude integration
+├── talon/               # 🎤 Talon voice modules
+│   ├── toggle_sleep.py  # Core toggle action
+│   ├── keyboard_*.py    # V2: Keyboard management
+│   └── claude_*.py      # V2: Claude integration
+├── desktop/             # 🖥️ Desktop integration
+│   └── toggle-dictation.desktop
+└── tests/               # 🧪 Test scripts
+    └── test-install.sh
+```
+
 ## Credits
 
 - [Talon Voice](https://talonvoice.com/) by Ryan Hileman
@@ -323,6 +373,11 @@ MIT License - Feel free to use and modify!
 
 Contributions welcome! Please open an issue or pull request.
 
+See [docs/CLAUDE.md](docs/CLAUDE.md) for developer documentation.
+
 ## Support
 
-Having issues? Please check the Troubleshooting section above or open an issue on GitHub.
+Having issues? Please check:
+1. The Troubleshooting section above
+2. [docs/README_V2.md](docs/README_V2.md) for V2-specific issues
+3. Open an issue on GitHub
