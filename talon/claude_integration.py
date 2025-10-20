@@ -104,6 +104,8 @@ class Actions:
 
     def claude_send_clipboard():
         """Send clipboard contents to Claude"""
+        app.notify("DEBUG: claude_send_clipboard called")  # DEBUG
+
         if not ensure_claude_running():
             return
 
@@ -114,6 +116,7 @@ class Actions:
             return
 
         # Play prompt sound
+        app.notify("DEBUG: About to play sound")  # DEBUG
         play_sound("prompt")
 
         # Send to Claude (copies back to clipboard with notification)
