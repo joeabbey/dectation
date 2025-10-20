@@ -163,7 +163,34 @@ print_header "Step 5: Installing Dectation Scripts"
 # Copy Talon scripts to user directory
 print_info "Installing Talon scripts..."
 cp "$SCRIPT_DIR/talon/toggle_sleep.py" "$HOME/.talon/user/"
-print_success "Installed toggle_sleep.py (overwrites existing)"
+print_success "Installed toggle_sleep.py"
+
+# V2: Install keyboard manager and Claude integration
+if [ -f "$SCRIPT_DIR/talon/keyboard_manager.py" ]; then
+    cp "$SCRIPT_DIR/talon/keyboard_manager.py" "$HOME/.talon/user/"
+    print_success "Installed keyboard_manager.py (V2)"
+fi
+
+if [ -f "$SCRIPT_DIR/talon/claude_integration.py" ]; then
+    cp "$SCRIPT_DIR/talon/claude_integration.py" "$HOME/.talon/user/"
+    print_success "Installed claude_integration.py (V2)"
+fi
+
+if [ -f "$SCRIPT_DIR/talon/claude_templates.py" ]; then
+    cp "$SCRIPT_DIR/talon/claude_templates.py" "$HOME/.talon/user/"
+    print_success "Installed claude_templates.py (V2)"
+fi
+
+# V2: Copy Talon command files
+if [ -f "$SCRIPT_DIR/talon/keyboard_commands.talon" ]; then
+    cp "$SCRIPT_DIR/talon/keyboard_commands.talon" "$HOME/.talon/user/"
+    print_success "Installed keyboard_commands.talon (V2)"
+fi
+
+if [ -f "$SCRIPT_DIR/talon/claude_commands.talon" ]; then
+    cp "$SCRIPT_DIR/talon/claude_commands.talon" "$HOME/.talon/user/"
+    print_success "Installed claude_commands.talon (V2)"
+fi
 
 # Make scripts executable
 print_info "Making scripts executable..."
@@ -257,6 +284,17 @@ echo "Next steps:"
 echo "  1. Start Talon (can be done automatically below)"
 echo "  2. Install speech models via Talon tray icon (see above)"
 echo "  3. Press L1 + Y on Steam Deck (Ctrl+Space) to toggle voice control"
+echo ""
+print_info "V2 Features Installed:"
+echo "  • Automatic keyboard management (hides during dictation)"
+echo "  • Voice commands for Claude Code integration"
+echo "  • Quick prompt templates (review, refactor, debug, etc.)"
+echo ""
+echo "V2 Voice Commands:"
+echo "  • 'show/hide keyboard' - Manual keyboard control"
+echo "  • 'start claude' - Start Claude Code session"
+echo "  • 'claude review this' - Send code review prompt"
+echo "  • 'send to claude' - Send clipboard to Claude"
 echo ""
 echo "Tips:"
 echo "  • When Talon starts, it will show a microphone icon in your system tray"

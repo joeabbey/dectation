@@ -39,11 +39,26 @@ class Actions:
                 actions.mode.disable("command")
                 actions.mode.enable("dictation")
 
+                # V2: Hide keyboard when entering dictation mode
+                try:
+                    actions.user.keyboard_on_dictation_start()
+                    log_to_file("Keyboard auto-hide triggered")
+                except Exception as kbd_error:
+                    log_to_file(f"Keyboard hide failed (non-fatal): {kbd_error}")
+
                 app.notify("Dictation Mode 🎤")
                 log_to_file("Sent dictation mode notification")
             else:
                 # Currently awake, go to sleep
                 log_to_file("Going to sleep (calling speech.disable())")
+
+                # V2: Restore keyboard when exiting dictation mode
+                try:
+                    actions.user.keyboard_on_dictation_stop()
+                    log_to_file("Keyboard restore triggered")
+                except Exception as kbd_error:
+                    log_to_file(f"Keyboard restore failed (non-fatal): {kbd_error}")
+
                 actions.speech.disable()
                 app.notify("Sleeping 😴")
                 log_to_file("Sent sleeping notification")
