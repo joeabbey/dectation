@@ -25,10 +25,34 @@ mod.setting(
     desc="Automatically start Claude Code if not running",
 )
 
+mod.setting(
+    "dectation_claude_audio_feedback",
+    type=bool,
+    default=True,
+    desc="Play audio notification when sending prompts to Claude",
+)
+
 # Helper functions
 def get_script_path(script_name):
     """Get path to a dectation script"""
     return os.path.expanduser(f"~/dectation/scripts/{script_name}")
+
+def play_sound(sound_type="prompt"):
+    """Play a notification sound"""
+    # Check if audio feedback is enabled
+    audio_enabled = actions.user.settings.get("user.dectation_claude_audio_feedback", True)
+    if not audio_enabled:
+        return
+
+    script = get_script_path("play-sound.sh")
+    try:
+        subprocess.Popen(
+            [script, sound_type],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+    except Exception:
+        pass  # Non-fatal, just skip sound if it fails
 
 def run_claude_manager(command):
     """Run the Claude session manager script"""
@@ -89,6 +113,9 @@ class Actions:
             app.notify("Clipboard is empty")
             return
 
+        # Play prompt sound
+        play_sound("prompt")
+
         # Send to Claude (copies back to clipboard with notification)
         success, _ = run_claude_manager(f"send {text}")
         if success:
@@ -104,6 +131,9 @@ class Actions:
         if not prompt:
             app.notify("No prompt provided")
             return
+
+        # Play prompt sound
+        play_sound("prompt")
 
         # Send to Claude
         success, _ = run_claude_manager(f"send {prompt}")

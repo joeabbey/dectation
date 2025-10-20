@@ -41,7 +41,9 @@ Version 2 adds two major feature sets to make voice coding on Steam Deck truly h
 - `claude_integration.py` - Core integration logic
 - `claude_templates.py` - Pre-built prompt templates
 - `claude_commands.talon` - Voice command definitions
+- `play-sound.sh` - Soft audio notification when prompts are sent
 - Clipboard-based for seamless cross-app workflow
+- **Audio feedback** - Plays a gentle bell tone when sending prompts to Claude
 
 ## Installation
 
@@ -104,6 +106,9 @@ mod.setting("dectation_auto_hide_keyboard", bool, default=False)
 
 # Disable auto-start Claude if you want
 mod.setting("dectation_claude_auto_start", bool, default=False)
+
+# Disable audio feedback for Claude prompts if you want
+mod.setting("dectation_claude_audio_feedback", bool, default=False)
 ```
 
 ## File Structure
