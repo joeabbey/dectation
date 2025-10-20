@@ -55,7 +55,7 @@ with open(settings_file, 'r') as f:
 if 'hooks' not in settings:
     settings['hooks'] = {}
 
-settings['hooks']['UserPromptSubmit'] = [
+settings['hooks']['Stop'] = [
     {
         "hooks": [
             {

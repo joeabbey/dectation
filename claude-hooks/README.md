@@ -6,8 +6,8 @@ This directory contains Claude Code hooks that enhance the voice-to-Claude workf
 
 ### play-prompt-sound.sh
 
-**Type:** `UserPromptSubmit` hook
-**Purpose:** Plays a soft bell sound when you submit a prompt to Claude Code
+**Type:** `Stop` hook
+**Purpose:** Plays a soft bell sound when Claude finishes responding and is ready for your input
 **Sound:** Gentle bell tone (same as used for Talon voice commands)
 
 ## Installation
@@ -42,7 +42,7 @@ This will:
    ```json
    {
      "hooks": {
-       "UserPromptSubmit": [
+       "Stop": [
          {
            "hooks": [
              {
@@ -75,28 +75,30 @@ This will:
                 │
                 ▼
 ┌─────────────────────────────────────────┐
-│  UserPromptSubmit hook triggers          │
-│  play-prompt-sound.sh executes           │
+│   Claude processes your request          │
+│   Claude generates response...           │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│   Claude finishes responding             │
+│   Stop hook triggers                     │
+│   play-prompt-sound.sh executes          │
 └───────────────┬─────────────────────────┘
                 │
                 ▼
 ┌─────────────────────────────────────────┐
 │      🔔 Bell sound plays                 │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│   Prompt continues to Claude             │
-│   Claude processes your request          │
+│   "I'm done, you can speak now!"         │
 └─────────────────────────────────────────┘
 ```
 
 ## Benefits
 
-- **Immediate feedback:** Know when your prompt was submitted
+- **Perfect timing:** Know exactly when Claude is done and ready for you
 - **Pleasant UX:** Soft, non-intrusive bell tone
-- **Voice workflow enhancement:** Confirms successful prompt submission
-- **Automatic:** Works for all prompts (typed, pasted, or voice-dictated)
+- **Voice workflow enhancement:** Audio cue to start speaking your next prompt
+- **Automatic:** Works after every Claude response
 
 ## Troubleshooting
 
