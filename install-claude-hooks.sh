@@ -22,11 +22,13 @@ echo -e "${BLUE}→${NC} Creating ~/.claude/hooks/ directory..."
 mkdir -p ~/.claude/hooks
 echo -e "${GREEN}✓${NC} Directory created"
 
-# Copy hook script
-echo -e "${BLUE}→${NC} Installing play-prompt-sound.sh hook..."
+# Copy hook scripts
+echo -e "${BLUE}→${NC} Installing hook scripts..."
 cp "$SCRIPT_DIR/claude-hooks/play-prompt-sound.sh" ~/.claude/hooks/
+cp "$SCRIPT_DIR/claude-hooks/play-stop-sound.sh" ~/.claude/hooks/
 chmod +x ~/.claude/hooks/play-prompt-sound.sh
-echo -e "${GREEN}✓${NC} Hook script installed"
+chmod +x ~/.claude/hooks/play-stop-sound.sh
+echo -e "${GREEN}✓${NC} Hook scripts installed"
 
 # Check if settings.json exists
 if [ ! -f ~/.claude/settings.json ]; then
@@ -61,7 +63,7 @@ settings['hooks']['Stop'] = [
         "hooks": [
             {
                 "type": "command",
-                "command": os.path.expanduser("~/.claude/hooks/play-prompt-sound.sh")
+                "command": os.path.expanduser("~/.claude/hooks/play-stop-sound.sh")
             }
         ]
     }

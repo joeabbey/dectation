@@ -45,6 +45,7 @@ echo "  • Talon community commands (~/.talon/user/community/)"
 echo "  • Dectation scripts (toggle_sleep.py)"
 echo "  • Keyboard shortcuts configuration"
 echo "  • Desktop file integration"
+echo "  • Claude Code hooks (audio feedback)"
 echo "  • PATH modifications from .bashrc"
 echo ""
 print_warning "This will NOT remove:"
@@ -241,7 +242,27 @@ if [ -d "$HOME/.talon" ]; then
 fi
 
 echo ""
-print_header "Step 7: Cleanup"
+print_header "Step 7: Removing Claude Code Hooks"
+
+# Remove Claude Code hooks if they exist
+if [ -d "$HOME/.claude/hooks" ]; then
+    if [ -f "$HOME/.claude/hooks/play-stop-sound.sh" ] || [ -f "$HOME/.claude/hooks/play-prompt-sound.sh" ]; then
+        print_info "Removing Dectation Claude hooks..."
+        rm -f "$HOME/.claude/hooks/play-stop-sound.sh"
+        rm -f "$HOME/.claude/hooks/play-prompt-sound.sh"
+        print_success "Claude hooks removed"
+
+        print_warning "Note: Hook configuration in ~/.claude/settings.json needs manual cleanup"
+        print_info "Edit ~/.claude/settings.json to remove 'Stop' and 'PreToolUse' hook entries"
+    else
+        print_info "No Dectation Claude hooks found"
+    fi
+else
+    print_info "Claude hooks directory not found"
+fi
+
+echo ""
+print_header "Step 8: Cleanup"
 
 # Remove log files
 if [ -f "$HOME/.talon/toggle-debug.log" ]; then

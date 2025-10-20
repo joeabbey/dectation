@@ -4,15 +4,19 @@ This directory contains Claude Code hooks that enhance the voice-to-Claude workf
 
 ## Available Hooks
 
+### play-stop-sound.sh
+
+**Hook:** `Stop`
+**Purpose:** Plays a success sound when Claude finishes responding
+**Sound:** Pleasant completion chime (completion-success.ogg)
+**When it plays:** When Claude finishes responding and is ready for your next prompt
+
 ### play-prompt-sound.sh
 
-**Hooks:** `Stop` and `PreToolUse` (AskUserQuestion)
-**Purpose:** Plays a soft bell sound when Claude is ready for your input
-**Sound:** Gentle bell tone (same as used for Talon voice commands)
-
-**When the bell plays:**
-- `Stop` hook: When Claude finishes responding and is ready for your next prompt
-- `PreToolUse` hook: When Claude presents options/questions for you to answer
+**Hook:** `PreToolUse` (AskUserQuestion)
+**Purpose:** Plays a bell sound when Claude needs your input
+**Sound:** Gentle bell tone (bell.ogg)
+**When it plays:** When Claude presents options/questions for you to answer
 
 ## Installation
 
@@ -26,17 +30,19 @@ cd ~/dectation
 ```
 
 This will:
-1. Copy the hook script to `~/.claude/hooks/`
-2. Make it executable
-3. Add the hook configuration to `~/.claude/settings.json`
+1. Copy both hook scripts to `~/.claude/hooks/`
+2. Make them executable
+3. Add the hook configurations to `~/.claude/settings.json`
 4. Explain the approval process
 
 ### Manual Installation
 
-1. **Copy the hook script:**
+1. **Copy the hook scripts:**
    ```bash
    mkdir -p ~/.claude/hooks
+   cp ~/dectation/claude-hooks/play-stop-sound.sh ~/.claude/hooks/
    cp ~/dectation/claude-hooks/play-prompt-sound.sh ~/.claude/hooks/
+   chmod +x ~/.claude/hooks/play-stop-sound.sh
    chmod +x ~/.claude/hooks/play-prompt-sound.sh
    ```
 
@@ -51,7 +57,7 @@ This will:
            "hooks": [
              {
                "type": "command",
-               "command": "/home/deck/.claude/hooks/play-prompt-sound.sh"
+               "command": "/home/deck/.claude/hooks/play-stop-sound.sh"
              }
            ]
          }
@@ -129,8 +135,10 @@ This will:
 ## Benefits
 
 - **Perfect timing:** Know exactly when Claude is ready for your input
-- **Pleasant UX:** Soft, non-intrusive bell tone
-- **Voice workflow enhancement:** Audio cue to start speaking your response
+- **Distinct sounds:** Different audio cues for different events
+  - Success chime when Claude finishes responding
+  - Bell when Claude needs your input on a question
+- **Voice workflow enhancement:** Clear audio cues to start speaking your response
 - **Complete coverage:** Works for both normal responses and interactive questions
 - **Automatic:** No manual intervention needed once configured
 
@@ -149,10 +157,13 @@ This will:
    # Should show -rwxr-xr-x permissions
    ```
 
-3. **Test the sound script manually:**
+3. **Test the sound scripts manually:**
    ```bash
    ~/dectation/scripts/play-sound.sh prompt
-   # Should hear a bell sound
+   # Should hear a bell sound (for questions/options)
+
+   ~/dectation/scripts/play-sound.sh success
+   # Should hear a success chime (for Claude finishing)
    ```
 
 4. **Check Claude settings:**

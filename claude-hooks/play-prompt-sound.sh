@@ -1,6 +1,6 @@
 #!/bin/bash
-# Claude Code UserPromptSubmit hook
-# Plays a soft bell sound when you're about to submit a prompt to Claude
+# Claude Code PreToolUse hook (for AskUserQuestion)
+# Plays a bell sound when Claude presents options/questions
 
 # Use the dectation sound player
 SOUND_SCRIPT="$HOME/dectation/scripts/play-sound.sh"
