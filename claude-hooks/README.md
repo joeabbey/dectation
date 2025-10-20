@@ -6,9 +6,13 @@ This directory contains Claude Code hooks that enhance the voice-to-Claude workf
 
 ### play-prompt-sound.sh
 
-**Type:** `Stop` hook
-**Purpose:** Plays a soft bell sound when Claude finishes responding and is ready for your input
+**Hooks:** `Stop` and `PreToolUse` (AskUserQuestion)
+**Purpose:** Plays a soft bell sound when Claude is ready for your input
 **Sound:** Gentle bell tone (same as used for Talon voice commands)
+
+**When the bell plays:**
+- `Stop` hook: When Claude finishes responding and is ready for your next prompt
+- `PreToolUse` hook: When Claude presents options/questions for you to answer
 
 ## Installation
 
@@ -51,26 +55,34 @@ This will:
              }
            ]
          }
+       ],
+       "PreToolUse": [
+         {
+           "tool": "AskUserQuestion",
+           "hooks": [
+             {
+               "type": "command",
+               "command": "/home/deck/.claude/hooks/play-prompt-sound.sh"
+             }
+           ]
+         }
        ]
      }
    }
    ```
 
-3. **Approve the hook on first use:**
-   - Next time you submit a prompt in Claude Code, you'll see a hook approval dialog
-   - Select "Always allow" to enable the sound for all future prompts
-   - The bell will play immediately after approval
+3. **Approve the hooks on first use:**
+   - Next time you interact with Claude Code, you'll see hook approval dialogs
+   - Select "Always allow" to enable the sounds
+   - The bell will play when Claude is ready for input
 
 ## How It Works
 
+### Normal Response Flow (Stop Hook)
+
 ```
 ┌─────────────────────────────────────────┐
-│  You type/paste prompt in Claude Code   │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│       Press Enter to submit              │
+│  You submit a prompt in Claude Code     │
 └───────────────┬─────────────────────────┘
                 │
                 ▼
@@ -93,12 +105,34 @@ This will:
 └─────────────────────────────────────────┘
 ```
 
+### Options/Questions Flow (PreToolUse Hook)
+
+```
+┌─────────────────────────────────────────┐
+│   Claude needs your input/decision       │
+│   PreToolUse(AskUserQuestion) triggers   │
+│   play-prompt-sound.sh executes          │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│      🔔 Bell sound plays                 │
+│   "I need your input!"                   │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│   Options appear for you to select      │
+└─────────────────────────────────────────┘
+```
+
 ## Benefits
 
-- **Perfect timing:** Know exactly when Claude is done and ready for you
+- **Perfect timing:** Know exactly when Claude is ready for your input
 - **Pleasant UX:** Soft, non-intrusive bell tone
-- **Voice workflow enhancement:** Audio cue to start speaking your next prompt
-- **Automatic:** Works after every Claude response
+- **Voice workflow enhancement:** Audio cue to start speaking your response
+- **Complete coverage:** Works for both normal responses and interactive questions
+- **Automatic:** No manual intervention needed once configured
 
 ## Troubleshooting
 
@@ -123,8 +157,8 @@ This will:
 
 4. **Check Claude settings:**
    ```bash
-   cat ~/.claude/settings.json | grep -A 10 "UserPromptSubmit"
-   # Should show the hook configuration
+   cat ~/.claude/settings.json | grep -A 20 "hooks"
+   # Should show both Stop and PreToolUse hook configurations
    ```
 
 ### Hook approval keeps prompting

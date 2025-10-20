@@ -35,12 +35,12 @@ if [ ! -f ~/.claude/settings.json ]; then
 fi
 
 # Check if hook is already configured
-if grep -q "UserPromptSubmit" ~/.claude/settings.json 2>/dev/null; then
-    echo -e "${YELLOW}!${NC} Hook already configured in settings.json"
+if grep -q "Stop.*PreToolUse" ~/.claude/settings.json 2>/dev/null; then
+    echo -e "${YELLOW}!${NC} Hooks already configured in settings.json"
 else
-    echo -e "${BLUE}→${NC} Adding hook to Claude Code settings..."
+    echo -e "${BLUE}→${NC} Adding hooks to Claude Code settings..."
 
-    # Use Python to safely add the hook to JSON
+    # Use Python to safely add the hooks to JSON
     python3 << 'EOF'
 import json
 import os
@@ -55,8 +55,22 @@ with open(settings_file, 'r') as f:
 if 'hooks' not in settings:
     settings['hooks'] = {}
 
+# Stop hook: Fires when Claude finishes responding and is ready for input
 settings['hooks']['Stop'] = [
     {
+        "hooks": [
+            {
+                "type": "command",
+                "command": os.path.expanduser("~/.claude/hooks/play-prompt-sound.sh")
+            }
+        ]
+    }
+]
+
+# PreToolUse hook: Fires before AskUserQuestion tool (when options appear)
+settings['hooks']['PreToolUse'] = [
+    {
+        "tool": "AskUserQuestion",
         "hooks": [
             {
                 "type": "command",
@@ -73,7 +87,7 @@ with open(settings_file, 'w') as f:
 print("Hook configuration added")
 EOF
 
-    echo -e "${GREEN}✓${NC} Hook configured"
+    echo -e "${GREEN}✓${NC} Hooks configured"
 fi
 
 echo ""
@@ -83,14 +97,18 @@ echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo -e "${YELLOW}IMPORTANT:${NC} Hook approval required on first use"
 echo ""
-echo "Next time you submit a prompt in Claude Code:"
-echo "  1. You'll see a hook approval dialog"
-echo "  2. Select ${GREEN}\"Always allow\"${NC} to enable the sound"
-echo "  3. 🔔 Bell will play on all future prompts!"
+echo "Next time you interact with Claude Code:"
+echo "  1. You'll see hook approval dialogs"
+echo "  2. Select ${GREEN}\"Always allow\"${NC} to enable the sounds"
+echo "  3. 🔔 Bell will play when Claude is ready for input!"
+echo ""
+echo "The bell will play:"
+echo "  • When Claude finishes responding (Stop hook)"
+echo "  • When Claude presents options/questions (PreToolUse hook)"
 echo ""
 echo "To test:"
 echo "  1. Open Claude Code"
-echo "  2. Type any prompt and press Enter"
-echo "  3. Approve the hook when prompted"
+echo "  2. Submit a prompt and wait for Claude to finish"
+echo "  3. Approve hooks when prompted"
 echo "  4. Listen for the bell! 🔔"
 echo ""
